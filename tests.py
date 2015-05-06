@@ -441,7 +441,7 @@ class ScriptterOperationsTests(unittest.TestCase):
                 ('echo @somebodyelse says: '
                  'Yo @worldsenoughstudios you know I can\'t be beat; '
                  'I heard you like twitter so I put some wit in your tweet!'),
-                'echo with a delay of next morning 8am',
+                'echo with a delay of tomorrow at 8am',
             ]
         )
 

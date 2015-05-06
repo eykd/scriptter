@@ -1,0 +1,13 @@
+language: python
+python:
+  - "2.7"
+  - "3.4"
+# command to install dependencies
+install:
+  pip install -e .[test]
+# command to run tests
+script:
+  green --run-coverage tests.py
+
+after_success:
+  coveralls

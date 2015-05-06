@@ -92,7 +92,8 @@ setup(
     # $ pip install -e .[dev,test]
     extras_require={
         'dev': ['check-manifest'],
-        'test': ['coverage', 'ensure', 'green', 'mock', 'tox', 'pep8'],
+        'test': ['coverage', 'coveralls',
+                 'ensure', 'green', 'mock', 'pep8', 'tox'],
     },
 
     # To provide executable scripts, use entry points in preference to the

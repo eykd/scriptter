@@ -1,0 +1,15 @@
+defaults:
+  delay: 30min
+  timezone: US/Eastern
+---
+delay: tomorrow at 8am
+as: eykd
+say: Hello, world!
+---
+delay: 30s
+as: worldsenoughstudios
+say: Hey, @eykd!
+---
+delay: tomorrow at 8am
+as: somebodyelse
+say: Yo @worldsenoughstudios your pants are on fire \#lolwut

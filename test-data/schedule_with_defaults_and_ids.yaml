@@ -1,0 +1,18 @@
+defaults:
+  delay: 30min
+  timezone: US/Eastern
+---
+delay: tomorrow at 8am
+as: eykd
+say: Hello, world!
+id: 36292ccff3f811e4889bc82a1417f375
+---
+delay: 30s
+as: worldsenoughstudios
+say: Hey, @eykd!
+id: 3d13091cf3f811e4a8edc82a1417f375
+---
+delay: tomorrow at 8am
+as: somebodyelse
+say: "Yo @worldsenoughstudios you know I can't be beat; I heard you like twitter so I put some wit in your tweet!"
+id: 4156347af3f811e4a134c82a1417f375

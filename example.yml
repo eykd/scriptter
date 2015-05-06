@@ -1,0 +1,23 @@
+defaults:
+  delay: 5min
+  cmd: 'echo @{as} says: {say}'
+  timezone: US/Pacific
+---
+delay: tomorrow at 8am
+as: eykd
+say: Hello, world!
+id: ac62bde6f36b11e4b4d0c82a1417f375
+---
+delay: 30s
+as: worldsenoughstudios
+say: Hey, @eykd!
+id: ac8cd482f36b11e49c68c82a1417f375
+---
+delay: tomorrow at 8am
+as: somebodyelse
+say: Yo @worldsenoughstudios your pants are on fire \#lolwut
+id: ac8cd600f36b11e49175c82a1417f375
+---
+as: worldsenoughstudios
+say: '@somebodyelse OW! OWOWOWOWOWOWOW!'
+id: d9ce30f8f43011e4bcd6c82a1417f375

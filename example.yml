@@ -1,23 +1,592 @@
 defaults:
-  delay: 5min
-  cmd: 'echo @{as} says: {say}'
-  timezone: US/Pacific
+  delay: 1min
+  activate: t set active
+  update: t update
+  cmd:
+  - '{activate} {as}'
+  - '{update} "{say}"'
+  timezone: US/Eastern
 ---
-delay: tomorrow at 8am
-as: eykd
-say: Hello, world!
-id: ac62bde6f36b11e4b4d0c82a1417f375
+delay: tomorrow at 10am
+as: Abbott
+say: "Well @Costello, I'm going to New York with you."
 ---
-delay: 30s
-as: worldsenoughstudios
-say: Hey, @eykd!
-id: ac8cd482f36b11e49c68c82a1417f375
+as: Abbott
+say: "@Costello You know Bucky Harris, the Yankee's manager, gave me a job as coach for as long as you're on the team."
 ---
-delay: tomorrow at 8am
-as: somebodyelse
-say: Yo @worldsenoughstudios your pants are on fire \#lolwut
-id: ac8cd600f36b11e49175c82a1417f375
+as: Costello
+say: "Look @Abbott, if you're the coach, you must know all the players."
 ---
-as: worldsenoughstudios
-say: '@somebodyelse OW! OWOWOWOWOWOWOW!'
-id: d9ce30f8f43011e4bcd6c82a1417f375
+as: Abbott
+say: "@Costello I certainly do."
+---
+as: Costello
+say: "@Abbott Well you know I've never met the guys. So you'll have to tell me their names, and then I'll know who's playing on the team."
+---
+as: Abbott
+say: "@Costello Oh, I'll tell you their names, but you know it seems to me they give these ball players now-a-days very peculiar names."
+---
+as: Costello
+say: "@Abbott You mean funny names?"
+---
+as: Abbott
+say: "@Costello Strange names, pet names...like Dizzy Dean..."
+---
+as: Costello
+say: "@Abbott His brother Daffy."
+---
+as: Abbott
+say: "@Costello Daffy Dean..."
+---
+as: Costello
+say: "@Abbott And their French cousin."
+---
+as: Abbott
+say: "@Costello French?"
+---
+as: Costello
+say: "@Abbott Goof\xC3\xA9"
+---
+as: Abbott
+say: "@Costello Goof\xC3\xA9 Dean. Well, let's see, we have on the bags, Who's on first, What's on second, I Don't Know is on third..."
+---
+as: Costello
+say: "@Abbott That's what I want to find out."
+---
+as: Abbott
+say: "@Costello I say Who's on first, What's on second, I Don't Know's on third."
+---
+as: Costello
+say: "@Abbott Are you the manager?"
+---
+as: Abbott
+say: "@Costello Yes."
+---
+as: Costello
+say: "@Abbott You gonna be the coach too?"
+---
+as: Abbott
+say: "@Costello Yes."
+---
+as: Costello
+say: "@Abbott And you don't know the fellows' names?"
+---
+as: Abbott
+say: "@Costello Well I should."
+---
+as: Costello
+say: "@Abbott Well then who's on first?"
+---
+as: Abbott
+say: "@Costello Yes."
+---
+as: Costello
+say: "@Abbott I mean the fellow's name."
+---
+as: Abbott
+say: "@Costello Who."
+---
+as: Costello
+say: "@Abbott The guy on first."
+---
+as: Abbott
+say: "@Costello Who."
+---
+as: Costello
+say: "@Abbott The first baseman."
+---
+as: Abbott
+say: "@Costello Who."
+---
+as: Costello
+say: "@Abbott The guy playing..."
+---
+as: Abbott
+say: "@Costello Who is on first!"
+---
+as: Costello
+say: "@Abbott I'm asking YOU who's on first."
+---
+as: Abbott
+say: "@Costello That's the man's name."
+---
+as: Costello
+say: "@Abbott That's who's name?"
+---
+as: Abbott
+say: "@Costello Yes."
+---
+as: Costello
+say: "@Abbott Well go ahead and tell me."
+---
+as: Abbott
+say: "@Costello That's it."
+---
+as: Costello
+say: "@Abbott That's who?"
+---
+as: Abbott
+say: "@Costello Yes."
+---
+delay: 10min
+as: Costello
+say: "@Abbott Look, you gotta first baseman?"
+---
+as: Abbott
+say: "@Costello Certainly."
+---
+as: Costello
+say: "@Abbott Who's playing first?"
+---
+as: Abbott
+say: "@Costello That's right."
+---
+as: Costello
+say: "@Abbott When you pay off the first baseman every month, who gets the money?"
+---
+as: Abbott
+say: "@Costello Every dollar of it."
+---
+as: Costello
+say: "@Abbott All I'm trying to find out is the fellow's name on first base."
+---
+as: Abbott
+say: "@Costello Who."
+---
+as: Costello
+say: "@Abbott The guy that gets..."
+---
+as: Abbott
+say: "@Costello That's it."
+---
+as: Costello
+say: "@Abbott Who gets the money..."
+---
+as: Abbott
+say: "@Costello He does, every dollar. Sometimes his wife comes down and collect"
+  it.'
+---
+as: Costello
+say: "@Abbott Who's wife?"
+---
+as: Abbott
+say: "@Costello Yes."
+---
+delay: 10min
+as: Abbott
+say: "@Costello What's wrong with that?"
+---
+as: Costello
+say: "@Abbott Look, all I wanna know is when you sign up the first baseman, how doe"
+  he sign his name?'
+---
+as: Abbott
+say: "@Costello Who."
+---
+as: Costello
+say: "@Abbott The guy."
+---
+as: Abbott
+say: "@Costello Who."
+---
+as: Costello
+say: "@Abbott How does he sign..."
+---
+as: Abbott
+say: "@Costello That's how he signs it."
+---
+as: Costello
+say: "@Abbott Who?"
+---
+as: Abbott
+say: "@Costello Yes."
+---
+delay: 10min
+as: Costello
+say: "@Abbott All I'm trying to find out is what's the guy's name on first base."
+---
+as: Abbott
+say: "@Costello No. What is on second base."
+---
+as: Costello
+say: "@Abbott I'm not asking you who's on second."
+---
+as: Abbott
+say: "@Costello Who's on first."
+---
+as: Costello
+say: "@Abbott One base at a time!"
+---
+as: Abbott
+say: "@Costello Well, don't change the players around."
+---
+as: Costello
+say: "@Abbott I'm not changing nobody!"
+---
+as: Abbott
+say: "@Costello Take it easy, buddy."
+---
+as: Costello
+say: "@Abbott I'm only asking you, who's the guy on first base?"
+---
+as: Abbott
+say: "@Costello That's right."
+---
+as: Costello
+say: "@Abbott Ok."
+---
+as: Abbott
+say: "@Costello All right."
+---
+delay: 10min
+as: Costello
+say: "@Abbott What's the guy's name on first base?"
+---
+as: Abbott
+say: "@Costello No. What is on second."
+---
+as: Costello
+say: "@Abbott I'm not asking you who's on second."
+---
+as: Abbott
+say: "@Costello Who's on first."
+---
+as: Costello
+say: "@Abbott I don't know."
+---
+as: Abbott
+say: "@Costello He's on third, we're not talking about him."
+---
+as: Costello
+say: "@Abbott Now how did I get on third base?"
+---
+as: Abbott
+say: "@Costello Why you mentioned his name."
+---
+as: Costello
+say: "@Abbott If I mentioned the third baseman's name, who did I say is playing third?"
+---
+as: Abbott
+say: "@Costello No. Who's playing first."
+---
+as: Costello
+say: "@Abbott What's on first?"
+---
+as: Abbott
+say: "@Costello What's on second."
+---
+as: Costello
+say: "@Abbott I don't know."
+---
+as: Abbott
+say: "@Costello He's on third."
+---
+as: Costello
+say: "@Abbott There I go, back on third again!"
+---
+delay: 10min
+as: Costello
+say: "@Abbott Would you just stay on third base and don't go off it."
+---
+as: Abbott
+say: "@Costello All right, what do you want to know?"
+---
+as: Costello
+say: "@Abbott Now who's playing third base?"
+---
+as: Abbott
+say: "@Costello Why do you insist on putting Who on third base?"
+---
+as: Costello
+say: "@Abbott What am I putting on third."
+---
+as: Abbott
+say: "@Costello No. What is on second."
+---
+as: Costello
+say: "@Abbott You don't want who on second?"
+---
+as: Abbott
+say: "@Costello Who is on first."
+---
+as: Costello
+say: "@Abbott I don't know."
+---
+cmd:
+- '{activate} Abbott'
+- '{update} "@Costello Third base!"'
+- '{activate} Costello'
+- '{update} "@Abbott Third base!"'
+---
+delay: 10min
+as: Costello
+say: "@Abbott Look, you gotta outfield?"
+---
+as: Abbott
+say: "@Costello Sure."
+---
+as: Costello
+say: "@Abbott The left fielder's name?"
+---
+as: Abbott
+say: "@Costello Why."
+---
+as: Costello
+say: "@Abbott I just thought I'd ask you."
+---
+as: Abbott
+say: "@Costello Well, I just thought I'd tell ya."
+---
+as: Costello
+say: "@Abbott Then tell me who's playing left field."
+---
+as: Abbott
+say: "@Costello Who's playing first."
+---
+as: Costello
+say: "@Abbott I'm not... stay out of the infield! I want to know what's the guy'"
+  name in left field?'
+---
+as: Abbott
+say: "@Costello No, What is on second."
+---
+as: Costello
+say: "@Abbott I'm not asking you who's on second."
+---
+as: Abbott
+say: "@Costello Who's on first!"
+---
+as: Costello
+say: "@Abbott I don't know."
+---
+cmd:
+- '{activate} Abbott'
+- '{update} "@Costello Third base!"'
+- '{activate} Costello'
+- '{update} "@Abbott Third base!"'
+---
+delay: 10min
+as: Costello
+say: "@Abbott The left fielder's name?"
+---
+as: Abbott
+say: "@Costello Why."
+---
+as: Costello
+say: "@Abbott Because!"
+---
+as: Abbott
+say: "@Costello Oh, he's centerfield."
+---
+delay: 10min
+as: Costello
+say: "@Abbott Look, You gotta pitcher on this team?"
+---
+as: Abbott
+say: "@Costello Sure."
+---
+as: Costello
+say: "@Abbott The pitcher's name?"
+---
+as: Abbott
+say: "@Costello Tomorrow."
+---
+as: Costello
+say: "@Abbott You don't want to tell me today?"
+---
+as: Abbott
+say: "@Costello I'm telling you now."
+---
+as: Costello
+say: "@Abbott Then go ahead."
+---
+as: Abbott
+say: "@Costello Tomorrow!"
+---
+as: Costello
+say: "@Abbott What time?"
+---
+as: Abbott
+say: "@Costello What time what?"
+---
+as: Costello
+say: "@Abbott What time tomorrow are you gonna tell me who's pitching?"
+---
+as: Abbott
+say: "@Costello Now listen. Who is not pitching."
+---
+as: Costello
+say: "@Abbott I'll break your arm, you say who's on first! I want to know what'"
+  the pitcher's name?'
+---
+as: Abbott
+say: "@Costello What's on second."
+---
+as: Costello
+say: "@Abbott I don't know."
+---
+cmd:
+- '{activate} Abbott'
+- '{update} "@Costello Third base!"'
+- '{activate} Costello'
+- '{update} "@Abbott Third base!"'
+---
+delay: 10min
+as: Costello
+say: "@Abbott Gotta a catcher?"
+---
+as: Abbott
+say: "@Costello Certainly."
+---
+as: Costello
+say: "@Abbott The catcher's name?"
+---
+as: Abbott
+say: "@Costello Today."
+---
+as: Costello
+say: "@Abbott Today, and tomorrow's pitching."
+---
+as: Abbott
+say: "@Costello Now you've got it."
+---
+as: Costello
+say: "@Abbott All we got is a couple of days on the team."
+---
+delay: 10min
+as: Costello
+say: "@Abbott You know I'm a catcher too."
+---
+as: Abbott
+say: "@Costello So they tell me."
+---
+as: Costello
+say: "@Abbott I get behind the plate to do some fancy catching, Tomorrow's pitchin"
+  on my team and a heavy hitter gets up.'
+---
+as: Costello
+say: "@Abbott Now the heavy hitter bunts the ball. When he bunts the ball, me, bein"
+  a good catcher, I'm gonna throw the guy out at first base.'
+---
+as: Costello
+say: "@Abbott So I pick up the ball and throw it to who?"
+---
+as: Abbott
+say: "@Costello Now that's the first thing you've said right."
+---
+as: Costello
+say: "@Abbott I don't even know what I'm talking about!"
+---
+delay: 10min
+as: Abbott
+say: "@Costello That's all you have to do."
+---
+as: Costello
+say: "@Abbott Is to throw the ball to first base."
+---
+as: Abbott
+say: "@Costello Yes!"
+---
+as: Costello
+say: "@Abbott Now who's got it?"
+---
+as: Abbott
+say: "@Costello Naturally."
+---
+delay: 10min
+as: Costello
+say: "@Abbott Look, if I throw the ball to first base, somebody's gotta get it. No"
+  who has it?'
+---
+as: Abbott
+say: "@Costello Naturally."
+---
+as: Costello
+say: "@Abbott Who?"
+---
+as: Abbott
+say: "@Costello Naturally."
+---
+as: Costello
+say: "@Abbott Naturally?"
+---
+as: Abbott
+say: "@Costello Naturally."
+---
+as: Costello
+say: "@Abbott So I pick up the ball and I throw it to Naturally."
+---
+as: Abbott
+say: "@Costello No you don't, you throw the ball to Who."
+---
+as: Costello
+say: "@Abbott Naturally."
+---
+as: Abbott
+say: "@Costello That's different."
+---
+as: Costello
+say: "@Abbott That's what I said."
+---
+as: Abbott
+say: "@Costello You're not saying it..."
+---
+as: Costello
+say: "@Abbott I throw the ball to Naturally."
+---
+as: Abbott
+say: "@Costello You throw it to Who."
+---
+as: Costello
+say: "@Abbott Naturally."
+---
+as: Abbott
+say: "@Costello That's it."
+---
+as: Costello
+say: "@Abbott That's what I said!"
+---
+as: Abbott
+say: "@Costello You ask me."
+---
+as: Costello
+say: "@Abbott I throw the ball to who?"
+---
+as: Abbott
+say: "@Costello Naturally."
+---
+as: Costello
+say: "@Abbott Now you ask me."
+---
+as: Abbott
+say: "@Costello You throw the ball to Who?"
+---
+as: Costello
+say: "@Abbott Naturally."
+---
+as: Abbott
+say: "@Costello That's it."
+---
+as: Costello
+say: "@Abbott Same as you! Same as YOU!"
+---
+as: Costello
+say: "@Abbott I throw the ball to who. Whoever it is drops the ball and the guy run"
+  to second.'
+---
+as: Costello
+say: "@Abbott Who picks up the ball and throws it to What. What throws it to I Don'"
+  Know. I Don't Know throws it back to Tomorrow, Triple play.'
+---
+as: Costello
+say: "@Abbott Another guy gets up and hits a long fly ball to Because. Why? I don'"
+  know! He's on third and I don't give a darn!'
+---
+as: Abbott
+say: "@Costello What?"
+---
+as: Costello
+say: "@Abbott I said I don't give a darn!"
+---
+as: Abbott
+say: "@Costello Oh, that's our shortstop."

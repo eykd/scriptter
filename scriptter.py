@@ -18,12 +18,12 @@ Options:
 from collections import deque, Iterable, Mapping, OrderedDict
 from codecs import open
 import datetime as dt
+import hashlib
 import itertools as it
 import logging
 import pprint
 import shlex
 import subprocess
-import uuid
 
 from docopt import docopt
 from path import path
@@ -50,6 +50,7 @@ def construct_mapping(loader, node):
 OrderedLoader.add_constructor(
     yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
     construct_mapping)
+
 
 class OrderedDumper(yaml.Dumper):
     pass
@@ -152,22 +153,22 @@ class ScheduleLoader(object):
 
         return options, items
 
-    def write_schedule(self, fp=None):
-        if fp is None:
-            assert isinstance(self.file_path, six.string_types)
-            fp = self.file_path
-
-        with open(fp, 'w', encoding='utf-8') as fo:
-            fo.write(self.as_yaml())
-
-    def set_option(self, key, value):
-        self.loaded_options[key] = value
-        self.options[key] = value
-
     def add_ids(self):
         for item in self.items:
             if 'id' not in item:
-                item['id'] = uuid.uuid1().hex
+                item['id'] = self.hash_item(item)
+
+    def hash_item(self, item):
+        if not isinstance(item, six.string_types):
+            if isinstance(item, Mapping):
+                item = tuple(sorted(
+                    (k, self.hash_item(v))
+                    for k, v in item.items()
+                ))
+            elif isinstance(item, Iterable):
+                item = tuple(sorted(item))
+
+        return hashlib.md5(repr(item)).hexdigest()
 
     def as_stream(self):
         stream = [{'defaults': self.loaded_options}]
@@ -328,7 +329,8 @@ class Scriptter(object):
         if item is None:
             logger.warning("Nothing to do!")
         elif when > now:
-            logger.warning("Will run `%s` at %s", item['id'], when.isoformat())
+            for command in self.get_commands(item):
+                logger.warning("Will run `%s` at %s", command, when.isoformat())
         else:
             self.set_next(item)
             logger.debug('Running with item: %s', pprint.pformat(item))
@@ -366,7 +368,7 @@ def main():   # pragma: no cover
     logger.debug("Received arguments: %s", pprint.pformat(arguments))
     loaded_schedule = ScheduleLoader(arguments['<schedule>'])
     loaded_schedule.add_ids()
-    loaded_schedule.write_schedule()
+    # loaded_schedule.write_schedule()
 
     schedule = Schedule(loaded_schedule.options, loaded_schedule.items)
 

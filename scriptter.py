@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 """Scriptter
 
+Scriptter is a brain for your cron job.
+
 Usage:
     scriptter [--reset] [--state <state-path>] [trial | run] <schedule>
     scriptter check <schedule>
@@ -13,7 +15,8 @@ Options:
     --state <state-path>   Path for storing state [default: "./state.yml"]
     --reset                Reset stored state
 """
-from collections import deque, Iterable, OrderedDict
+from collections import deque, Iterable, Mapping, OrderedDict
+from codecs import open
 import datetime as dt
 import itertools as it
 import logging
@@ -48,7 +51,6 @@ OrderedLoader.add_constructor(
     yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
     construct_mapping)
 
-
 class OrderedDumper(yaml.Dumper):
     pass
 
@@ -74,7 +76,7 @@ def _load_file_path_or_yaml(method, data):
         else:
             file_path = path(data)
             if file_path.exists():
-                with open(data) as fi:
+                with open(data, encoding='utf-8') as fi:
                     return _load_yaml(method, fi)
 
     else:
@@ -99,8 +101,21 @@ def yaml_dump_all(data):
     return yaml.dump_all(data, Dumper=OrderedDumper, default_flow_style=False)
 
 
+def _ensure_unicode_strings(value):
+    if isinstance(value, six.text_type):
+        return value
+    elif isinstance(value, six.string_types):
+        return six.u(value)
+    elif isinstance(value, Mapping):
+        return {k: _ensure_unicode_strings(v) for k, v in value.items()}
+    elif isinstance(value, Iterable):
+        return [_ensure_unicode_strings(i) for i in value]
+    else:
+        return value
+
+
 DEFAULTS = {
-    'delay': '5m',
+    'delay': '5mins',
     'timezone': 'US/Pacific',
     'cmd': 'echo @{as} says: {say}',
     'repeat': True,
@@ -142,7 +157,7 @@ class ScheduleLoader(object):
             assert isinstance(self.file_path, six.string_types)
             fp = self.file_path
 
-        with open(fp, 'w') as fo:
+        with open(fp, 'w', encoding='utf-8') as fo:
             fo.write(self.as_yaml())
 
     def set_option(self, key, value):
@@ -287,8 +302,12 @@ class Scriptter(object):
             else self.get_next_run_time(next_item, now=now))
 
     def get_context(self, item):
-        ctx = dict(self.schedule.options)
-        ctx.update(item)
+        ctx = {}
+        for data in (self.schedule.options, item):
+            for key, value in data.items():
+                # Ensure that all values are unicode strings
+                ctx[key] = _ensure_unicode_strings(value)
+
         return ctx
 
     def get_commands(self, item):
@@ -319,17 +338,17 @@ class Scriptter(object):
                 logger.info("Running command: %r", command)
                 if not dry_run:
                     result = subprocess.check_output(command)
-                logger.info("Result was: %s", result)
+                    logger.info("Result was: %s", result)
 
     def check(self):
         formatter = '%b %d, %Y at %X'
         now = self.schedule.get_now()
-        print("%s %s -- (start)" % (now.strftime(formatter), now.tzinfo))
+        print(six.u("%s %s -- (start)") % (now.strftime(formatter), now.tzinfo))
         for item in self.schedule.items:
             print('-----')
             delay = self.get_context(item)['delay']
             when = self.get_next_run_time(item, now=now)
-            print("%s -- (%s)" % (when.strftime(formatter), delay))
+            print(six.u("%s -- (%s)") % (when.strftime(formatter), delay))
             for command in self.get_commands(item):
                 print(command)
             now = when
@@ -337,6 +356,7 @@ class Scriptter(object):
 
 
 def main():   # pragma: no cover
+    logging.basicConfig()
     arguments = docopt(__doc__, version='Scriptter {}'.format(VERSION))
     if arguments.get('--verbose'):
         logger.setLevel(logging.DEBUG)

@@ -5,8 +5,8 @@
 Scriptter is a brain for your cron job.
 
 Usage:
-    scriptter [--reset] [--state <state-path>] [trial | run] <schedule>
-    scriptter check <schedule>
+    scriptter [--reset] [--verbose] [--state <state-path>] [trial | run] <schedule>
+    scriptter [--verbose] check <schedule>
 
 Options:
     -h --help              Show this screen.

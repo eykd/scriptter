@@ -9,3 +9,6 @@ say: Hey, @eykd!
 delay: tomorrow at 8am
 as: somebodyelse
 say: Yo @worldsenoughstudios your pants are on fire \#lolwut
+cmd:
+  - echo hello
+  - echo world

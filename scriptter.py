@@ -14,7 +14,7 @@ Options:
     --verbose              Show verbose output.
     --state <state-path>   Path for storing state [default: "./state.yml"]
     --reset                Reset stored state
-"""
+"""  # noqa
 from collections import deque, Iterable, Mapping, OrderedDict
 from codecs import open
 import datetime as dt
@@ -102,18 +102,21 @@ def yaml_dump_all(data):
     return yaml.dump_all(data, Dumper=OrderedDumper, default_flow_style=False)
 
 
-def _ensure_unicode_strings(value):
-    if isinstance(value, six.text_type):
+if six.PY2:  # pragma: nocover
+    def _ensure_unicode_strings(value):
+        if isinstance(value, six.text_type):
+            return value
+        elif isinstance(value, six.string_types):
+            return value.decode('utf-8')
+        elif isinstance(value, Mapping):
+            return {k: _ensure_unicode_strings(v) for k, v in value.items()}
+        elif isinstance(value, Iterable):
+            return [_ensure_unicode_strings(i) for i in value]
+        else:
+            return value
+else:
+    def _ensure_unicode_strings(value):  # pragma: no cover
         return value
-    elif isinstance(value, six.string_types):
-        return six.u(value)
-    elif isinstance(value, Mapping):
-        return {k: _ensure_unicode_strings(v) for k, v in value.items()}
-    elif isinstance(value, Iterable):
-        return [_ensure_unicode_strings(i) for i in value]
-    else:
-        return value
-
 
 DEFAULTS = {
     'delay': '5mins',
@@ -153,59 +156,15 @@ class ScheduleLoader(object):
 
         return options, items
 
-    def add_ids(self):
-        for item in self.items:
-            if 'id' not in item:
-                item['id'] = self.hash_item(item)
-
-    def hash_item(self, item):
-        if not isinstance(item, six.string_types):
-            if isinstance(item, Mapping):
-                item = tuple(sorted(
-                    (k, self.hash_item(v))
-                    for k, v in item.items()
-                ))
-            elif isinstance(item, Iterable):
-                item = tuple(sorted(item))
-
-        return hashlib.md5(repr(item)).hexdigest()
-
-    def as_stream(self):
-        stream = [{'defaults': self.loaded_options}]
-        stream.extend(self.items)
-        return stream
-
-    def as_yaml(self):
-        return yaml_dump_all(self.as_stream())
-
 
 class Schedule(object):
     def __init__(self, options, items):
         self.options = options
         self.items = items
+        self.by_id = {}
+        self.next_after_id = {}
 
-    def by_id(self, id):
-        try:
-            return next(it.dropwhile(
-                lambda i: i.get('id') != id,
-                self.items
-            ))
-        except StopIteration:
-            raise IndexError(id)
-
-    def next_after_id(self, id):
-        try:
-            gen = it.dropwhile(
-                lambda i: i.get('id') != id,
-                self.items
-            )
-            next(gen)
-            return next(gen)
-        except StopIteration:
-            if self.options['repeat']:
-                return self.items[0]
-            else:
-                raise IndexError(id)
+        self.index()
 
     def get_timezone(self):
         return pytz.timezone(self.options['timezone'])
@@ -215,6 +174,34 @@ class Schedule(object):
 
     def get_now(self):
         return self.localize_naive_utc_datetime(dt.datetime.utcnow())
+
+    def index(self):
+        self.by_id.clear()
+        self.next_after_id.clear()
+        last_item = None
+        for item in self.items:
+            if 'id' not in item:
+                item['id'] = self.hash_item(item)
+            item_id = item['id']
+            self.by_id[item_id] = item
+            if last_item is not None:
+                self.next_after_id[last_item['id']] = item
+            last_item = item
+        if self.options.get('repeat'):
+            self.next_after_id[last_item['id']] = self.items[0]
+
+    def hash_item(self, item):
+        if not isinstance(item, six.string_types):
+            if isinstance(item, Mapping):
+                item = tuple(sorted(
+                    (k, self.hash_item(v))
+                    for k, v in item.items()
+                    if k != 'id'
+                ))
+            elif isinstance(item, Iterable):
+                item = tuple(sorted(item))
+
+        return hashlib.md5(repr(item).encode('utf-8')).hexdigest()
 
 
 class StateLoader(object):
@@ -252,8 +239,8 @@ class Scriptter(object):
             scheduled_item = self.schedule.items[0]
         elif scheduled_id:
             try:
-                scheduled_item = self.schedule.by_id(scheduled_id)
-            except IndexError:
+                scheduled_item = self.schedule.by_id[scheduled_id]
+            except KeyError:
                 logger.error("Could not find scheduled item %s", scheduled_id)
 
         return scheduled_item
@@ -269,8 +256,8 @@ class Scriptter(object):
 
     def get_next_item_after(self, item):
         try:
-            return self.schedule.next_after_id(item['id'])
-        except IndexError:
+            return self.schedule.next_after_id[item['id']]
+        except KeyError:
             return None
 
     def get_next_run_time(self, item, now=None):
@@ -367,8 +354,6 @@ def main():   # pragma: no cover
 
     logger.debug("Received arguments: %s", pprint.pformat(arguments))
     loaded_schedule = ScheduleLoader(arguments['<schedule>'])
-    loaded_schedule.add_ids()
-    # loaded_schedule.write_schedule()
 
     schedule = Schedule(loaded_schedule.options, loaded_schedule.items)
 

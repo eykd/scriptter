@@ -9,6 +9,7 @@ import tempfile
 from ensure import ensure
 from path import path
 import pytz
+import six
 
 import scriptter
 
@@ -83,6 +84,47 @@ class YamlTests(unittest.TestCase):
         ensure(result).equals(self.docs.text())
 
 
+if six.PY2:
+    class UnicodeEnforcementTests(unittest.TestCase):
+        def setUp(self):
+            self.str = 'foo'
+            self.u_str = u'foo'
+            self.high_chars = '\xe3\x81\xab'
+            self.u_chars = self.high_chars.decode('utf-8')
+
+        def test_it_doesnt_touch_unicode_strings(self):
+            result = scriptter._ensure_unicode_strings(self.u_chars)
+            ensure(result).is_a(six.text_type)
+
+        def test_it_casts_non_unicode_strings(self):
+            result = scriptter._ensure_unicode_strings(self.high_chars)
+            ensure(result).equals(self.u_chars)
+
+        def test_it_casts_strings_in_dicts(self):
+            data = {'foo': self.high_chars}
+            expected = {'foo': self.u_chars}
+            result = scriptter._ensure_unicode_strings(data)
+            ensure(result).equals(expected)
+
+        def test_it_casts_strings_in_lists(self):
+            data = [self.high_chars, self.str]
+            expected = [self.u_chars, self.u_str]
+            result = scriptter._ensure_unicode_strings(data)
+            ensure(result).equals(expected)
+
+        def test_it_casts_nested_strings_in_lists(self):
+            data = [[self.high_chars, self.str]]
+            expected = [[self.u_chars, self.u_str]]
+            result = scriptter._ensure_unicode_strings(data)
+            ensure(result).equals(expected)
+
+        def test_it_casts_nested_strings_in_dicts(self):
+            data = {'foo': {'bar': self.high_chars}}
+            expected = {'foo': {'bar': self.u_chars}}
+            result = scriptter._ensure_unicode_strings(data)
+            ensure(result).equals(expected)
+
+
 class ScheduleExtractionWithDefaultsTests(unittest.TestCase):
     def setUp(self):
         result = scriptter.ScheduleLoader.extract_options_and_schedule_items(
@@ -154,51 +196,6 @@ class ScheduleLoaderOptionsTests(unittest.TestCase):
         ).has_key('timezone').whose_value.equals('US/Eastern')  # noqa
 
 
-class ScheduleLoaderOperationsTests(unittest.TestCase):
-    def setUp(self):
-        tmpdir = self.tmpdir = path(tempfile.mkdtemp())
-        schedule = DATA / 'schedule_with_defaults.yaml'
-        dest = self.schedule_path = tmpdir / schedule.name
-        schedule.copy(dest)
-        self.loader = scriptter.ScheduleLoader(self.schedule_path)
-
-    def tearDown(self):
-        self.tmpdir.rmtree_p()
-
-    def test_it_should_add_ids_to_a_schedule(self):
-        for item in self.loader.items:
-            ensure(item).does_not_contain('id')
-
-        self.loader.add_ids()
-
-        for item in self.loader.items:
-            ensure(item).contains('id')
-
-    def test_it_should_write_changes_to_a_schedule(self):
-        self.loader.add_ids()
-        self.loader.write_schedule()
-
-        new_loader = scriptter.ScheduleLoader(self.schedule_path)
-        for item in new_loader.items:
-            ensure(item).contains('id')
-
-    def test_it_should_not_write_changes_to_options(self):
-        self.loader.options['foo'] = 'bar'
-        self.loader.write_schedule()
-
-        new_loader = scriptter.ScheduleLoader(self.schedule_path)
-        ensure(new_loader.options).does_not_contain('foo')
-
-    def test_it_should_write_changes_to_loaded_options(self):
-        self.loader.set_option('foo', 'bar')
-        self.loader.write_schedule()
-
-        new_loader = scriptter.ScheduleLoader(self.schedule_path)
-        ensure(
-            new_loader.options
-        ).has_key('foo').whose_value.equals('bar')  # noqa
-
-
 class ScheduleConstructorTests(unittest.TestCase):
     def setUp(self):
         self.options, self.items = options, items = {}, []
@@ -211,6 +208,31 @@ class ScheduleConstructorTests(unittest.TestCase):
         ensure(self.schedule.items).is_(self.items)
 
 
+class ScheduleIndexTests(unittest.TestCase):
+    def setUp(self):
+        self.loader = scriptter.ScheduleLoader(
+            DATA / 'schedule_without_defaults.yaml'
+        )
+
+        self.schedule = scriptter.Schedule(
+            self.loader.options,
+            self.loader.items
+        )
+
+    def test_it_should_index_items(self):
+        ensure(self.schedule.by_id).is_a(dict)
+        ensure(self.schedule.by_id).is_nonempty()
+
+    def test_it_should_assign_ids(self):
+        ensure.each_of(self.schedule.by_id.values()).contains('id')
+
+    def test_it_should_index_neighbors(self):
+        ensure(self.schedule.next_after_id).is_a(dict)
+        ensure(
+            self.schedule.next_after_id
+        ).is_a(dict).of(six.string_types[0]).to(dict)
+
+
 class ScheduleOperationsTests(unittest.TestCase):
     def setUp(self):
         loaded = scriptter.ScheduleLoader(
@@ -220,30 +242,33 @@ class ScheduleOperationsTests(unittest.TestCase):
         self.schedule = scriptter.Schedule(loaded.options, loaded.items)
 
     def test_it_should_get_items_by_id(self):
-        item = self.schedule.by_id('36292ccff3f811e4889bc82a1417f375')
+        item = self.schedule.by_id['36292ccff3f811e4889bc82a1417f375']
         ensure(item).is_a(dict)
         ensure(item).has_key('say').whose_value.equals('Hello, world!')  # noqa
 
     def test_getting_a_nonexistent_items_by_id_raises_an_IndexError(self):
-        ensure(self.schedule.by_id).called_with('foo').raises(IndexError)
+        ensure(
+            self.schedule.by_id.__getitem__
+        ).called_with('foo').raises(KeyError)
 
     def test_it_should_get_the_next_item_after_an_id(self):
-        item = self.schedule.next_after_id('36292ccff3f811e4889bc82a1417f375')
+        item = self.schedule.next_after_id['36292ccff3f811e4889bc82a1417f375']
         ensure(item).is_a(dict)
         ensure(item).has_key('say').whose_value.equals('Hey, @eykd!')  # noqa
 
     def test_it_should_wrap_around_when_getting_the_next_item_after_an_id(self):
-        item = self.schedule.next_after_id('4156347af3f811e4a134c82a1417f375')
+        item = self.schedule.next_after_id['4156347af3f811e4a134c82a1417f375']
         ensure(item).is_a(dict)
         ensure(item).has_key('say').whose_value.equals('Hello, world!')  # noqa
 
     def test_it_should_not_wrap_around_when_repeat_is_False(self):
         self.schedule.options['repeat'] = False
+        self.schedule.index()  # This will honor the new option
         ensure(
-            self.schedule.next_after_id
+            self.schedule.next_after_id.__getitem__
         ).called_with(
             '4156347af3f811e4a134c82a1417f375'
-        ).raises(IndexError)
+        ).raises(KeyError)
 
     def test_it_should_obtain_the_timezone(self):
         ensure(
@@ -320,7 +345,7 @@ class ScriptterOperationsTests(unittest.TestCase):
         ensure(
             self.scriptter.get_scheduled_item
         ).called_with().is_(
-            self.schedule.by_id('3d13091cf3f811e4a8edc82a1417f375')
+            self.schedule.by_id['3d13091cf3f811e4a8edc82a1417f375']
         )
 
     def test_it_should_log_an_error_if_it_cant_get_a_scheduled_item(self):
@@ -344,8 +369,8 @@ class ScriptterOperationsTests(unittest.TestCase):
             )
 
     def test_it_should_get_the_next_item_after(self):
-        item = self.schedule.by_id('36292ccff3f811e4889bc82a1417f375')
-        expected = self.schedule.by_id('3d13091cf3f811e4a8edc82a1417f375')
+        item = self.schedule.by_id['36292ccff3f811e4889bc82a1417f375']
+        expected = self.schedule.by_id['3d13091cf3f811e4a8edc82a1417f375']
         ensure(
             self.scriptter.get_next_item_after
         ).called_with(
@@ -354,7 +379,8 @@ class ScriptterOperationsTests(unittest.TestCase):
 
     def test_it_should_return_None_when_theres_no_item_after(self):
         self.schedule.options['repeat'] = False
-        item = self.schedule.by_id('4156347af3f811e4a134c82a1417f375')
+        self.schedule.index()  # This will honor the new option
+        item = self.schedule.by_id['4156347af3f811e4a134c82a1417f375']
         ensure(
             self.scriptter.get_next_item_after
         ).called_with(
@@ -377,7 +403,7 @@ class ScriptterOperationsTests(unittest.TestCase):
         ensure(result).equals(expected)
 
     def test_it_should_save_the_next_scheduled_item(self):
-        item = self.schedule.by_id('3d13091cf3f811e4a8edc82a1417f375')
+        item = self.schedule.by_id['3d13091cf3f811e4a8edc82a1417f375']
         self.scriptter.set_next(item)
         ensure(
             self.scriptter.state
@@ -391,7 +417,7 @@ class ScriptterOperationsTests(unittest.TestCase):
         expected = pytz.timezone('US/Eastern').localize(
             dt.datetime(2015, 12, 25, 8, 53, 30)
         )
-        item = self.schedule.by_id('36292ccff3f811e4889bc82a1417f375')
+        item = self.schedule.by_id['36292ccff3f811e4889bc82a1417f375']
         self.scriptter.set_next(item, now=utcnaw)
         ensure(
             self.scriptter.state
@@ -401,14 +427,15 @@ class ScriptterOperationsTests(unittest.TestCase):
 
     def test_it_should_save_None_if_no_more_scheduled_items(self):
         self.schedule.options['repeat'] = False
-        item = self.schedule.by_id('4156347af3f811e4a134c82a1417f375')
+        self.schedule.index()  # This will honor the new option
+        item = self.schedule.by_id['4156347af3f811e4a134c82a1417f375']
         self.scriptter.set_next(item)
         ensure(
             self.scriptter.state
         ).has_key('scheduled').whose_value.is_none()  # noqa
 
     def test_it_should_create_item_context(self):
-        item = self.schedule.by_id('4156347af3f811e4a134c82a1417f375')
+        item = self.schedule.by_id['4156347af3f811e4a134c82a1417f375']
         expected = dict()
         expected.update(scriptter.DEFAULTS)
         expected.update(self.schedule.options)
@@ -419,9 +446,9 @@ class ScriptterOperationsTests(unittest.TestCase):
         ensure(ctx).equals(expected)
 
     def test_it_should_render_a_command_to_run(self):
-        item = self.schedule.by_id('4156347af3f811e4a134c82a1417f375')
+        item = self.schedule.by_id['4156347af3f811e4a134c82a1417f375']
         result = self.scriptter.get_commands(item)
-        ensure(result).is_a(list).of(str)
+        ensure(result).is_a(list).of(six.text_type)
         ensure(result).equals(
             [('echo @somebodyelse says: '
               'Yo @worldsenoughstudios you know I can\'t be beat; '
@@ -433,9 +460,9 @@ class ScriptterOperationsTests(unittest.TestCase):
             'echo @{as} says: {say}',
             'echo with a delay of {delay}'
         ]
-        item = self.schedule.by_id('4156347af3f811e4a134c82a1417f375')
+        item = self.schedule.by_id['4156347af3f811e4a134c82a1417f375']
         result = self.scriptter.get_commands(item)
-        ensure(result).is_a(list).of(str)
+        ensure(result).is_a(list).of(six.text_type)
         ensure(result).equals(
             [
                 ('echo @somebodyelse says: '
@@ -455,9 +482,22 @@ class ScriptterOperationsTests(unittest.TestCase):
                 ['echo', '@eykd', 'says:', 'Hello,', 'world!']
             )
 
+    def test_it_should_not_run_if_not_time_to_run_yet(self):
+        self.scriptter.state['next'] = '36292ccff3f811e4889bc82a1417f375'
+        self.scriptter.state['when'] = dt.datetime.now() + dt.timedelta(60)
+        with mock.patch('subprocess.check_output') as patched:
+            self.scriptter.run()
+            ensure(patched.call_count).equals(0)
+
     def test_it_should_not_run_if_nothing_to_run(self):
         self.schedule.options['repeat'] = False
         self.scriptter.state['scheduled'] = None
         with mock.patch('subprocess.check_output') as patched:
             self.scriptter.run()
             ensure(patched.call_count).equals(0)
+
+    def test_it_should_check_a_schedule(self):
+        with mock.patch('sys.stdout') as patched:
+            # A bit of a cheat: just ensure that it runs w/o issue.
+            self.scriptter.check()
+            ensure(patched.write.call_count).does_not_equal(0)

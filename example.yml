@@ -163,8 +163,7 @@ as: Costello
 say: "@Abbott Who gets the money..."
 ---
 as: Abbott
-say: "@Costello He does, every dollar. Sometimes his wife comes down and collect"
-  it.'
+say: "@Costello He does, every dollar. Sometimes his wife comes down and collects it."
 ---
 as: Costello
 say: "@Abbott Who's wife?"
@@ -177,8 +176,7 @@ as: Abbott
 say: "@Costello What's wrong with that?"
 ---
 as: Costello
-say: "@Abbott Look, all I wanna know is when you sign up the first baseman, how doe"
-  he sign his name?'
+say: "@Abbott Look, all I wanna know is when you sign up the first baseman, how does he sign his name?"
 ---
 as: Abbott
 say: "@Costello Who."
@@ -344,8 +342,7 @@ as: Abbott
 say: "@Costello Who's playing first."
 ---
 as: Costello
-say: "@Abbott I'm not... stay out of the infield! I want to know what's the guy'"
-  name in left field?'
+say: "@Abbott I'm not... stay out of the infield! I want to know what's the guy's name in left field?"
 ---
 as: Abbott
 say: "@Costello No, What is on second."
@@ -416,8 +413,7 @@ as: Abbott
 say: "@Costello Now listen. Who is not pitching."
 ---
 as: Costello
-say: "@Abbott I'll break your arm, you say who's on first! I want to know what'"
-  the pitcher's name?'
+say: "@Abbott I'll break your arm, you say who's on first! I want to know what's the pitcher's name?"
 ---
 as: Abbott
 say: "@Costello What's on second."
@@ -461,12 +457,10 @@ as: Abbott
 say: "@Costello So they tell me."
 ---
 as: Costello
-say: "@Abbott I get behind the plate to do some fancy catching, Tomorrow's pitchin"
-  on my team and a heavy hitter gets up.'
+say: "@Abbott I get behind the plate to do some fancy catching, Tomorrow's pitching on my team and a heavy hitter gets up."
 ---
 as: Costello
-say: "@Abbott Now the heavy hitter bunts the ball. When he bunts the ball, me, bein"
-  a good catcher, I'm gonna throw the guy out at first base.'
+say: "@Abbott Now the heavy hitter bunts the ball. When he bunts the ball, me, being a good catcher, I'm gonna throw the guy out at first base."
 ---
 as: Costello
 say: "@Abbott So I pick up the ball and throw it to who?"
@@ -495,8 +489,7 @@ say: "@Costello Naturally."
 ---
 delay: 10min
 as: Costello
-say: "@Abbott Look, if I throw the ball to first base, somebody's gotta get it. No"
-  who has it?'
+say: "@Abbott Look, if I throw the ball to first base, somebody's gotta get it. Now who has it?"
 ---
 as: Abbott
 say: "@Costello Naturally."
@@ -571,16 +564,13 @@ as: Costello
 say: "@Abbott Same as you! Same as YOU!"
 ---
 as: Costello
-say: "@Abbott I throw the ball to who. Whoever it is drops the ball and the guy run"
-  to second.'
+say: "@Abbott I throw the ball to who. Whoever it is drops the ball and the guy runs to second."
 ---
 as: Costello
-say: "@Abbott Who picks up the ball and throws it to What. What throws it to I Don'"
-  Know. I Don't Know throws it back to Tomorrow, Triple play.'
+say: "@Abbott Who picks up the ball and throws it to What. What throws it to I Don't Know. I Don't Know throws it back to Tomorrow, Triple play."
 ---
 as: Costello
-say: "@Abbott Another guy gets up and hits a long fly ball to Because. Why? I don'"
-  know! He's on third and I don't give a darn!'
+say: "@Abbott Another guy gets up and hits a long fly ball to Because. Why? I don't know! He's on third and I don't give a darn!"
 ---
 as: Abbott
 say: "@Costello What?"

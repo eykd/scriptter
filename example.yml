@@ -1,7 +1,7 @@
 defaults:
   delay: 1min
-  activate: t set active
-  update: t update
+  activate: echo t set active
+  update: echo t update
   cmd:
   - '{activate} {as}'
   - '{update} "{say}"'

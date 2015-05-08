@@ -332,14 +332,18 @@ class Scriptter(object):
     def check(self):
         formatter = '%b %d, %Y at %X'
         now = self.schedule.get_now()
-        print(six.u("%s %s -- (start)") % (now.strftime(formatter), now.tzinfo))
+        print((
+            six.u("%s %s -- (start)") % (now.strftime(formatter), now.tzinfo)
+        ).encode('utf-8'))
         for item in self.schedule.items:
             print('-----')
             delay = self.get_context(item)['delay']
             when = self.get_next_run_time(item, now=now)
-            print(six.u("%s -- (%s)") % (when.strftime(formatter), delay))
+            print((
+                six.u("%s -- (%s)") % (when.strftime(formatter), delay)
+            ).encode('utf-8'))
             for command in self.get_commands(item):
-                print(command)
+                print(command.encode('utf-8'))
             now = when
         print('-----')
 

@@ -119,9 +119,9 @@ else:
         return value
 
 DEFAULTS = {
-    'delay': '5mins',
+    'delay': '1 minute',
     'timezone': 'US/Pacific',
-    'cmd': 'echo @{as} says: {say}',
+    'cmd': 'echo Hello {timezone}!',
     'repeat': True,
 }
 

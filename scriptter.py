@@ -32,7 +32,7 @@ import pytz
 import six
 import yaml
 
-__version__ = "0.2.5"
+__version__ = "0.3"
 
 
 logger = logging.getLogger('scriptter')

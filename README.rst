@@ -31,7 +31,7 @@ Example:
 ========
 
 Here's a simple script to run a daily conversation between two Twitter
-accounts, using the ```t`` Twitter CLI`_::
+accounts, using the `"t" Twitter CLI`_::
 
     defaults:
       delay: 1min
@@ -67,7 +67,7 @@ accounts, using the ```t`` Twitter CLI`_::
     as: Costello
     say: '@Abbott Look, you gotta outfield?'
 
-.. _``t`` Twitter CLI: https://github.com/sferik/t
+.. _t Twitter CLI: https://github.com/sferik/t
 
 Classic, I know. Here's what's going on: every time Scriptter runs, it
 remembers where it left off at, and at what time the next item should run. When

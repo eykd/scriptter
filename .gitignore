@@ -39,3 +39,4 @@ local.py
 pip-selfcheck.json
 state.yml
 .tox
+dist

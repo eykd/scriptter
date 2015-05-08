@@ -17,6 +17,9 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as fi:
     long_description = fi.read()
 
 
+with open(path.join(here, 'VERSION')) as fi:
+    VERSION = fi.read().strip()
+
 
 setup(
     name='scriptter',
@@ -24,7 +27,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.2.2',
+    version=VERSION,
 
     description='cron\'s missing brain. Stateful, time-based scripting.',
     long_description=long_description,

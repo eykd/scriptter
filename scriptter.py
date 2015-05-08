@@ -32,7 +32,9 @@ import pytz
 import six
 import yaml
 
-VERSION = 0.1
+PATH = path(__file__).abspath().dirname()
+
+VERSION = (PATH / 'VERSION').text().strip()
 
 logger = logging.getLogger('scriptter')
 

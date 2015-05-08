@@ -31,7 +31,7 @@ Example:
 ========
 
 Here's a simple script to run a daily conversation between two Twitter
-accounts, using the `"t" Twitter CLI`_::
+accounts, using the `t Twitter CLI`_::
 
     defaults:
       delay: 1min

@@ -246,10 +246,10 @@ class Scriptter(object):
 
         return scheduled_item
 
-    def get_scheduled_run_time(self):
+    def get_scheduled_run_time(self, item):
         when = self.state.get('when')
         if not when:
-            when = self.schedule.get_now()
+            when = self.get_next_run_time(item)
         else:
             when = pytz.UTC.localize(when)
 
@@ -270,12 +270,13 @@ class Scriptter(object):
         if now.tzinfo is None:
             now = pytz.UTC.localize(now)
         now = now.astimezone(tz)
-        logger.debug('Using base `now`: %r', now)
+        logger.debug('Using base `now`: %s', now)
         when = self.calendar.parseDT(
             delay,
             sourceTime=now,
             tzinfo=tz,
         )[0]
+        logger.debug('Parsed `%s` as %s', delay, when)
         return when
 
     def set_next(self, item, now=None):
@@ -311,7 +312,7 @@ class Scriptter(object):
 
     def run(self, dry_run=False):
         item = self.get_scheduled_item()
-        when = self.get_scheduled_run_time()
+        when = self.get_scheduled_run_time(item)
         now = self.schedule.get_now()
 
         if item is None:
@@ -321,7 +322,7 @@ class Scriptter(object):
                 logger.warning("Will run `%s` at %s", command, when.isoformat())
         else:
             self.set_next(item)
-            logger.debug('Running with item: %s', pprint.pformat(item))
+            logger.debug('Running with item:\n%s', pprint.pformat(dict(item)))
 
             for command in self.get_commands(item):
                 command = shlex.split(command)

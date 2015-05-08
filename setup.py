@@ -9,6 +9,7 @@ from setuptools import setup, find_packages
 # To use a consistent encoding
 from codecs import open
 from os import path
+import re
 
 here = path.abspath(path.dirname(__file__))
 
@@ -17,8 +18,14 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as fi:
     long_description = fi.read()
 
 
-with open(path.join(here, 'VERSION'), encoding='utf-8') as fi:
-    VERSION = fi.read().strip()
+def find_version(file_path):
+    with open(path.join(here, file_path), encoding='utf-8') as fi:
+        version_file = fi.read()
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
+                              version_file, re.M)
+    if version_match:
+        return version_match.group(1)
+    raise RuntimeError("Unable to find version string.")
 
 
 setup(
@@ -27,7 +34,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version=VERSION,
+    version=find_version('scriptter.py'),
 
     description='cron\'s missing brain. Stateful, time-based scripting.',
     long_description=long_description,

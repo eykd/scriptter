@@ -32,9 +32,8 @@ import pytz
 import six
 import yaml
 
-PATH = path(__file__).abspath().dirname()
+__version__ = "0.2.4"
 
-VERSION = (PATH / 'VERSION').text().strip()
 
 logger = logging.getLogger('scriptter')
 
@@ -352,7 +351,7 @@ class Scriptter(object):
 
 def main():   # pragma: no cover
     logging.basicConfig()
-    arguments = docopt(__doc__, version='Scriptter {}'.format(VERSION))
+    arguments = docopt(__doc__, version='Scriptter {}'.format(__version__))
     if arguments.get('--verbose'):
         logger.setLevel(logging.DEBUG)
     else:

@@ -362,7 +362,7 @@ def main():   # pragma: no cover
 
     schedule = Schedule(loaded_schedule.options, loaded_schedule.items)
 
-    state_path = arguments.get('<state-path>', './state.yml')
+    state_path = arguments.get('--state', './state.yml')
     state = StateLoader(state_path)
 
     if arguments['--reset']:

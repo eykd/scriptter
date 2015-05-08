@@ -17,7 +17,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as fi:
     long_description = fi.read()
 
 
-with open(path.join(here, 'VERSION')) as fi:
+with open(path.join(here, 'VERSION'), encoding='utf-8') as fi:
     VERSION = fi.read().strip()
 
 

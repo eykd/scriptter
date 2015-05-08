@@ -11,15 +11,15 @@ from codecs import open
 from os import path
 import re
 
-here = path.abspath(path.dirname(__file__))
+HERE = path.abspath(path.dirname(__file__))
 
 # Get the long description from the relevant file
-with open(path.join(here, 'README.rst'), encoding='utf-8') as fi:
-    long_description = fi.read()
+with open(path.join(HERE, 'README.rst'), encoding='utf-8') as fi:
+    LONG_DESCRIPTION = fi.read()
 
 
 def find_version(file_path):
-    with open(path.join(here, file_path), encoding='utf-8') as fi:
+    with open(path.join(HERE, file_path), encoding='utf-8') as fi:
         version_file = fi.read()
     version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
                               version_file, re.M)
@@ -28,16 +28,36 @@ def find_version(file_path):
     raise RuntimeError("Unable to find version string.")
 
 
+VERSION = find_version('scriptter.py')
+
+
+if sys.argv[-1] == 'tag':
+    os.system("git tag -a %s -m 'version %s'" % (version, version))
+    os.system("git push --tags")
+    sys.exit()
+
+
+if sys.argv[-1] == 'dist':
+    os.system("rm -rf dist/")
+    os.system("python setup.py sdist bdist_wheel")
+    sys.exit()
+
+
+if sys.argv[-1] == 'publish':
+    os.system("twine upload dist/*")
+    sys.exit()
+
+
 setup(
     name='scriptter',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version=find_version('scriptter.py'),
+    version=VERSION,
 
     description='cron\'s missing brain. Stateful, time-based scripting.',
-    long_description=long_description,
+    long_description=LONG_DESCRIPTION,
 
     # The project's main homepage.
     url='https://github.com/eykd/scriptter',

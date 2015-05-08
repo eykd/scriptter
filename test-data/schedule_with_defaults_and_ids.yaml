@@ -1,6 +1,7 @@
 defaults:
   delay: 30min
   timezone: US/Eastern
+  cmd: "echo @{as} says: {say}"
 ---
 delay: tomorrow at 8am
 as: eykd

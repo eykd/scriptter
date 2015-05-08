@@ -373,7 +373,8 @@ def main():   # pragma: no cover
 
     if arguments['run'] or arguments['trial']:
         scriptter.run(dry_run=arguments['trial'])
-        state.write_state()
+        if arguments['run']:
+            state.write_state()
     elif arguments['check']:
         scriptter.check()
 

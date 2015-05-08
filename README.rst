@@ -97,6 +97,22 @@ delay, like "5 minutes" or "5mins" or "tomorrow at 8am", relative to the
 previous item. We set a default ``delay`` at the top (or if we don't set a
 default, the default is, by default, ``5mins``).
 
+The ``delay`` of the first item is special: that determines how long after the
+first invocation the script will begin. This might be useful for a script that
+is keyed to time of day--you could say ``tomorrow at 8am`` and the script would
+begin in the morning, next day after you start your cron job.
+
+
+Repeating a Script
+==================
+
+Some scripts should only run once, some should repeat forever. By default, your
+script will repeat (go back to the beginning) after it completes. To change
+this behavior, include this at the top of your script::
+
+    defaults:
+        repeat: false
+
 
 Command Line
 ============

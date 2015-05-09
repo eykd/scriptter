@@ -246,10 +246,10 @@ class Scriptter(object):
 
         return scheduled_item
 
-    def get_scheduled_run_time(self, item):
+    def get_scheduled_run_time(self, item, now=None):
         when = self.state.get('when')
         if not when:
-            when = self.get_next_run_time(item)
+            when = self.get_next_run_time(item, now=now)
         else:
             when = pytz.UTC.localize(when)
 

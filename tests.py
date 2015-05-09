@@ -356,17 +356,14 @@ class ScriptterOperationsTests(unittest.TestCase):
             ).called_with().is_none()
             ensure(patched.call_count).equals(1)
 
-    def test_it_should_get_utcnow_for_the_scheduled_run_time(self):
+    def test_it_should_get_the_scheduled_run_time_for_the_default_object_when_none_set(self):  # noqa
         utcnaw = dt.datetime(2015, 12, 25, 13, 57)
-        utc_localized = pytz.UTC.localize(utcnaw)
-        localized = utc_localized.astimezone(self.schedule.get_timezone())
-        fake_datetime = mock.Mock(utcnow=mock.Mock(return_value=utcnaw))
-        with mock.patch('datetime.datetime', fake_datetime):
-            ensure(
-                self.scriptter.get_scheduled_run_time
-            ).called_with().equals(
-                localized
-            )
+        expected = self.schedule.get_timezone().localize(
+            dt.datetime(2015, 12, 26, 8, 0)
+        )
+        item = self.schedule.items[0]
+        result = self.scriptter.get_scheduled_run_time(item, now=utcnaw)
+        ensure(result).equals(expected)
 
     def test_it_should_get_the_next_item_after(self):
         item = self.schedule.by_id['36292ccff3f811e4889bc82a1417f375']

@@ -3,23 +3,23 @@
 Based on:
 https://github.com/pypa/sampleproject
 """
-
+import sys
 # Always prefer setuptools over distutils
 from setuptools import setup, find_packages
 # To use a consistent encoding
 from codecs import open
-from os import path
+import os
 import re
 
-HERE = path.abspath(path.dirname(__file__))
+HERE = os.path.abspath(os.path.dirname(__file__))
 
 # Get the long description from the relevant file
-with open(path.join(HERE, 'README.rst'), encoding='utf-8') as fi:
+with open(os.path.join(HERE, 'README.rst'), encoding='utf-8') as fi:
     LONG_DESCRIPTION = fi.read()
 
 
 def find_version(file_path):
-    with open(path.join(HERE, file_path), encoding='utf-8') as fi:
+    with open(os.path.join(HERE, file_path), encoding='utf-8') as fi:
         version_file = fi.read()
     version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
                               version_file, re.M)

@@ -312,24 +312,28 @@ class Scriptter(object):
 
     def run(self, dry_run=False):
         item = self.get_scheduled_item()
-        when = self.get_scheduled_run_time(item)
-        now = self.schedule.get_now()
 
         if item is None:
             logger.warning("Nothing to do!")
-        elif when > now:
+            return
+
+        when = self.get_scheduled_run_time(item)
+        now = self.schedule.get_now()
+
+        if when > now:
             for command in self.get_commands(item):
                 logger.warning("Will run `%s` at %s", command, when.isoformat())
-        else:
-            self.set_next(item)
-            logger.debug('Running with item:\n%s', pprint.pformat(dict(item)))
+            return
 
-            for command in self.get_commands(item):
-                command = shlex.split(command)
-                logger.info("Running command: %r", command)
-                if not dry_run:
-                    result = subprocess.check_output(command)
-                    logger.info("Result was: %s", result)
+        self.set_next(item)
+        logger.debug('Running with item:\n%s', pprint.pformat(dict(item)))
+
+        for command in self.get_commands(item):
+            command = shlex.split(command)
+            logger.info("Running command: %r", command)
+            if not dry_run:
+                result = subprocess.check_output(command)
+                logger.info("Result was: %s", result)
 
     def check(self):
         formatter = '%b %d, %Y at %X'

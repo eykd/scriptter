@@ -113,7 +113,7 @@ setup(
         "parsedatetime==1.4",
         "path.py==7.3",
         "pytz==2015.2",
-        "PyYAML==3.11",
+        "PyYAML==5.1",
     ],
 
     # List additional groups of dependencies here (e.g. development
